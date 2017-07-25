@@ -11,6 +11,8 @@
     <title>Title</title>
 </head>
 <body>
-111
+<script type="text/javascript">
+    location.href="/user/index";
+</script>
 </body>
 </html>

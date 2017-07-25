@@ -4,6 +4,8 @@ import cn.edu.dao.UserRepository;
 import cn.edu.entity.User;
 import cn.edu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,5 +19,11 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public User get(Integer id) {
         return userRepository.findOne(id);
+    }
+    @Transactional(readOnly = true)
+    public Page<User> page(Integer pageNo, Integer pageSize) {
+        PageRequest pageable=new PageRequest(pageNo-1, pageSize);
+        Page<User> page=userRepository.findAll(pageable);
+        return page;
     }
 }
