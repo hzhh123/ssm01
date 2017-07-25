@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="keywords" content="scclui框架">
+    <meta name="description" content="scclui为轻量级的网站后台管理系统模版。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="../plugin/layui/css/layui.css">
+    <style type="text/css">
+        .layer_notice{float:left; height:75px; width:330px;  overflow:hidden;  background:#5FB878; padding:10px;display: none}
+        .layer_notice a{color:#fff;}
+        .layer_notice li{ line-height:25px;}
+    </style>
+</head>
+<body>
+<div style="text-align: center;position:relative;top: 400px;">
+    <a href="#" id="tip" class="layui-btn-primary layui-btn">提示</a>
+    <a href="#" id="tip1" class="layui-btn-primary layui-btn">提示1</a>
+</div>
+<ul class="layer_notice">
+    <li><a href="http://fly.layui.com/jie/4827.html" target="_blank">1. layer 3.x 更新日志，最多人使用的Web弹层组件</a></li>
+    <li><a href="http://fly.layui.com/jie/2461.html" target="_blank">2. 关注 Layui 微信公众号，与我们更近距离交流</a></li>
+    <li><a href="http://fly.layui.com/jie/220.html" target="_blank">3. Fork layer on Github，用她，就给她加个星啵</a></li>
+</ul>
+
+<script type="text/javascript" src="../plugin/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../plugin/framework/layer/layer.js"></script>
+<script type="text/javascript" src="../plugin/layui/layui.js"></script>
+<script type="text/javascript" src="../plugin/framework/js/global.js"></script>
+<script type="text/javascript">
+    $('#tip').mouseenter(function () {
+        tipIndex = layer.tips("xxxxxxxx", this);
+    });
+    $('#tip1').click(function () {
+        $.layerOpen({
+            id: "add",
+            title: "新增用户",
+            width: "670px",
+            height: "530px",
+            content: "demo1.html",
+            yes: function (iBody) {
+            }
+        });
+    });
+    $('#tip').click(function () {
+        layer.open({
+            type: 1,
+            shade: false,
+            title: false, //不显示标题
+            width:'100px',
+            height:'100px',
+            content: $('.layer_notice'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            cancel: function(){
+                layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', {time: 5000, icon:6});
+            }
+        });
+    })
+
+
+</script>
+
+</body>
+</html>
