@@ -15,17 +15,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="/assets/plugin/layui/css/layui.css">
     <link rel="stylesheet" href="/assets/plugin/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/plugin/font-awesome/css/font-awesome.css">
     <style type="text/css">
         .elight-table .layui-form-checkbox {
             margin-top: 0;
             height: 20px;
             margin-right: 0px;
             line-height: 20px;
-        }
-        .toolbar-search-button{
-            position: relative;
-            float: right;
-            top:-30px;
         }
         .toolbar{
             position:relative;float: right;
@@ -40,15 +36,15 @@
 </head>
 <body style="padding: 10px;">
 
-    <div class="layui-btn-group">
-        <button class="layui-btn layui-btn-normal layui-btn-small" onclick="add()">添加</button>
-        <button class="layui-btn layui-btn-default layui-btn-small" onclick="del()">删除</button>
-        <button class="layui-btn layui-btn-default layui-btn-small" onclick="edit()">修改</button>
-    </div>
-    <div class="toolbar" >
-            <input type="text" class="layui-input"  placeholder="search..">
-            <button class="layui-btn-small layui-btn layui-btn-normal" >搜索</button>
-    </div>
+<div class="layui-btn-group">
+    <button class="layui-btn layui-btn-normal layui-btn-small" onclick="add()">添加</button>
+    <button class="layui-btn layui-btn-default layui-btn-small" onclick="del()">删除</button>
+    <button class="layui-btn layui-btn-default layui-btn-small" onclick="edit()">修改</button>
+</div>
+<div class="toolbar" >
+    <input type="text" class="layui-input"  placeholder="search..">
+    <button class="layui-btn-small layui-btn layui-btn-normal" >搜索</button>
+</div>
 
 <div class="layui-form">
     <table class="layui-table elight-table" id="gridList">
@@ -76,24 +72,29 @@
 <script type="text/javascript" src="/assets/plugin/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="/assets/plugin/framework/js/global.js" charset="utf-8"></script>
 <script type="text/javascript">
-
+function init() {
     layui.use(['form','laypage'], function(){
         var $ = layui.jquery, form = layui.form(),laypage = layui.laypage;
-
         var render = function(data){
             $('#t1').html('');
             $.each(data.content, function(index, item){
-                $('#t1').append("<tr>");
-                $('#t1').append("<td><input type=\"checkbox\" lay-skin=\"primary\" value='"+item.id+"'></td>");
-                $('#t1').append("<td>"+item.id+"</td>");
-                $('#t1').append("<td>"+item.username+"</td>");
-                $('#t1').append("<td>"+item.password+"</td>");
-                $('#t1').append("<td><div class=\"layui-btn-group\">"
+                if(item.username==null){
+                    item.username="";
+                }
+                if(item.password==null){
+                    item.password="";
+                }
+                $('#t1').append("<tr>"
+                    +"<td><input type=\"checkbox\" lay-skin=\"primary\" value='"+item.id+"'></td>"
+                    +"<td>"+item.id+"</td>"
+                    +"<td>"+item.username+"</td>"
+                    +"<td>"+item.password+"</td>"
+                    +"<td><div class=\"layui-btn-group\">"
                     +"<button class=\"layui-btn layui-btn-default layui-btn-small\" onclick=\"edit()\">修改</button>"
                     +"<button class=\"layui-btn layui-btn-warm layui-btn-small\" onclick=\"del()\">删除</button>"
                     +"<button class=\"layui-btn layui-btn-normal layui-btn-small\" onclick=\"del()\">查看</button>"
-                     +"</div> </td>");
-                $('#t1').append("</tr>");
+                    +"</div> </td>"
+                    +"</tr>");
             });
             form.render();
         };
@@ -114,20 +115,19 @@
                         ,jump: function(obj){
                             $('#allChoose').attr('checked',false);
                             var curr=obj.curr;
-                                $.ajax({
-                                    url: '/user/list',
-                                    data: {"pageSize": 5, "pageIndex": curr},
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        render(data);
-                                    }
-                                })
+                            $.ajax({
+                                url: '/user/list',
+                                data: {"pageSize": 5, "pageIndex": curr},
+                                dataType: 'json',
+                                success: function (data) {
+                                    render(data);
+                                }
+                            })
                         }
                     });
                 }
 
             });
-
         }
         getJson(1);
         //全选
@@ -139,17 +139,62 @@
             form.render('checkbox');
         });
     });
+}
 
-  function del() {
-      var ids = $("#gridList").gridSelectedRowValue();
-      if (ids.length == 0) {
-          $.layerMsg("请勾选要删除的记录。", "warning");
-          return;
-      }else {
-          alert(ids)
-      }
+init();
+    function del() {
+        var ids = $("#gridList").gridSelectedRowValue();
+        if (ids.length == 0) {
+            $.layerMsg("请勾选要删除的记录。", "warning");
+            return;
+        }else {
+            $.ajax({
+                url:'/user/delete',
+                data:{"ids":ids},
+                dataType:'json',
+                type:'post',
+                success:function (data) {
+                    if(data=="success"){
+                        $.layerMsg('删除成功!','success');
+                        $("#gridList").gridRemoveSelectedRow();
+                    }
+                }
+            })
+        }
+    }
 
-  }
+    function add() {
+        $.layerOpen({
+            id: "add",
+            title: "<i class='fa fa-plus'></i> 新增用户",
+            width: "670px",
+            height: "250px",
+            content: "/common/user/form.html",
+            yes: function (iBody) {
+                iBody.find('#btnSubmit').click();
+                init();
+            }
+        });
+    }
+    function edit() {
+        var ids = $("#gridList").gridSelectedRowValue();
+        if (ids.length != 1) {
+            $.layerMsg("请勾选要编辑的记录且条数只能为一。", "warning");
+            return;
+        }else {
+            $.layerOpen({
+                id: "add",
+                title: "<i class='fa fa-edit'></i> 编辑用户",
+                width: "670px",
+                height: "250px",
+                content: "/common/user/form.html?id="+ids[0],
+                yes: function (iBody) {
+                    iBody.find('#btnSubmit').click();
+                    init();
+                }
+            });
+        }
+    }
 </script>
 </body>
 </html>

@@ -258,6 +258,15 @@ $.fn.gridSelectedRowValue = function () {
     }
     return result;
 }
+$.fn.gridRemoveSelectedRow= function () {
+    var $selectedRows = $(this).children('tbody').find("input[type=checkbox]:checked");
+    if ($selectedRows.length > 0) {
+        for (var i = 0; i < $selectedRows.length; i++) {
+            console.log($selectedRows[i].parentNode.parentNode)
+            $selectedRows[i].parentNode.parentNode.remove();
+        }
+    }
+}
 
 /**
  * 获取URL指定参数值。

@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/7/21.
  */
@@ -25,5 +27,21 @@ public class UserServiceImpl implements UserService {
         PageRequest pageable=new PageRequest(pageNo-1, pageSize);
         Page<User> page=userRepository.findAll(pageable);
         return page;
+    }
+    @Transactional
+    public void delete(Integer id) {
+        userRepository.delete(id);
+    }
+    @Transactional
+    public void deleteBatch(List<Integer> ids) {
+        userRepository.deleteBatch(ids);
+    }
+    @Transactional
+    public void save(User user) {
+        userRepository.save(user);
+    }
+    @Transactional
+    public void update(User user) {
+        userRepository.update(user.getUsername(),user.getPassword(),user.getId());
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/7/21.
@@ -42,6 +44,15 @@ public class Test1 {
     }
     @Test
     public void test3(){
-        System.out.println(userService.get(1));
+        List<Integer>ids=new ArrayList<Integer>();
+        ids.add(3);
+        ids.add(4);
+        userService.deleteBatch(ids);
+    }
+    @Test
+    public void test4(){
+       User user=userService.get(1);
+       user.setUsername("dddxxx");
+       userService.update(user);
     }
 }
