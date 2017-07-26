@@ -1,5 +1,6 @@
 import cn.edu.dao.UserRepository;
 import cn.edu.entity.User;
+import cn.edu.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class Test1 {
     private DataSource dataSource;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
     @Test
     public void test1()throws SQLException{
         System.out.println(dataSource.getConnection());
@@ -36,5 +39,9 @@ public class Test1 {
         System.out.println("当前页记录数"+page.getNumberOfElements());
         System.out.println("总记录数"+page.getTotalElements());
         System.out.println("当前页元素："+page.getContent());
+    }
+    @Test
+    public void test3(){
+        System.out.println(userService.get(1));
     }
 }

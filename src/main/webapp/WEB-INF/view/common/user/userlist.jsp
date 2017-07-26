@@ -16,9 +16,12 @@
     <link rel="stylesheet" href="/assets/plugin/layui/css/layui.css">
 </head>
 <body>
-<table class="layui-table">
+<div class="layui-form">
+    <input type="hidden"  id="pages" lay-filter="pages" >
+    <table class="layui-table">
     <thead>
     <tr>
+        <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
         <th>ID</th>
         <th>用户名</th>
         <th>密码</th>
@@ -26,33 +29,33 @@
     </thead>
     <tbody id="t1"></tbody>
 </table>
+</div>
 <div id="page"></div>
-<input type="hidden"  id="pages" >
-<script type="text/javascript" src="/assets/plugin/jquery/jquery.min.js" charset="utf-8"></script>
+<%--<script type="text/javascript" src="/assets/plugin/jquery/jquery.min.js" charset="utf-8"></script>--%>
 <script type="text/javascript" src="/assets/plugin/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript">
-    layui.use(['laypage', 'layer','laytpl'], function() {
-        var laypage = layui.laypage
-            , layer = layui.layer,
-           $ = layui.jquery,
-            laytpl = layui.laytpl;
-        //模拟渲染
+
+    layui.use(['form','laypage'], function(){
+        var $ = layui.jquery, form = layui.form(),laypage = layui.laypage;
+
         var render = function(data){
             $('#t1').html('');
-            layui.each(data.content, function(index, item){
+            $.each(data.content, function(index, item){
                 $('#t1').append("<tr>");
+                $('#t1').append("<td><input type=\"checkbox\" lay-skin=\"primary\" ></td>");
                 $('#t1').append("<td>"+item.id+"</td>");
                 $('#t1').append("<td>"+item.username+"</td>");
                 $('#t1').append("<td>"+item.password+"</td>");
                 $('#t1').append("</tr>");
             });
+            form.render();
         };
         function getJson(curr) {
             $.ajax({
                 url: '/user/list',
-                data: {"pageSize": 5, "pageNo": curr||1},
+                data: {"pageSize": 5, "pageIndex": curr||1},
                 dataType: 'json',
-                async:false,//这一步很重要，必填
+//                async:false,//这一步很重要，必填
                 success: function (data) {
                     $('#pages').val(data.totalPages);
                     render(data);
@@ -68,14 +71,20 @@
             ,next: '<em>></em>'
             ,groups: 5
             ,skip: true
-//            ,skin: '#1E9FFF'
             ,pages:$('#pages').val()
             ,jump: function(obj){
                 var curr=obj.curr;
                 getJson(curr);
             }
         });
-
+        //全选
+        form.on('checkbox(allChoose)', function(data){
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function(index, item){
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
 
     });
 

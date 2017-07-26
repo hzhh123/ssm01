@@ -24,8 +24,8 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping("list")
-    public Page<User>list(Integer pageNo,Integer pageSize){
-        return userService.page(pageNo,pageSize);
+    public Page<User>list(Integer pageIndex,Integer pageSize){
+        return userService.page(pageIndex,pageSize);
     }
     @RequestMapping("index")
     public String index(){
