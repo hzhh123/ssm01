@@ -259,6 +259,7 @@ $.fn.gridSelectedRowValue = function () {
     return result;
 }
 
+
 /**
  * 获取URL指定参数值。
  * @param {String} name
@@ -290,6 +291,7 @@ $.fn.formSerialize = function (formdate, callback) {
             switch (type) {
                 case "checkbox":
                     value == "true" ? $field.attr("checked", 'checked') : $field.removeAttr("checked");
+                    console.log(value);
                     break;
                 case "select2":
                     if (!$field[0].multiple) {

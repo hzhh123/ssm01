@@ -16,6 +16,9 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     @Query("delete from User u where u.id in(:ids)")
     void deleteBatch(@Param("ids") List<Integer>ids);
     @Modifying
-    @Query("update User u set u.username=:username,u.password=:password where u.id=:id")
-    void update(@Param("username") String username,@Param("password")String password,@Param("id")Integer id);
+    @Query("update User u set u.username=:username,u.password=:password,u.state=:state where u.id=:id")
+    void update(@Param("state")String state,@Param("username") String username,@Param("password")String password,@Param("id")Integer id);
+    @Modifying
+    @Query("update User u set u.state=:state where u.id=:id")
+    void updateStatue(@Param("id") Integer id,@Param("state") String state);
 }

@@ -426,7 +426,7 @@ $(function(){
 	/*菜单json*/
 	var menu1 = [{"id":"1","name":"主菜单","parentId":"0","url":"","icon":"","order":"1","isHeader":"1","childMenus":[
 					{"id":"3","name":"商品管理","parentId":"1","url":"","icon":"&#xe604;","order":"1","isHeader":"0","childMenus":[
-						{"id":"4","name":"品牌管理","parentId":"3","url":"home.html","icon":"","order":"1","isHeader":"0","childMenus":""},
+						{"id":"4","name":"品牌管理","parentId":"3","url":"/user/index","icon":"","order":"1","isHeader":"0","childMenus":""},
 						{"id":"5","name":"分类管理","parentId":"3","url":"test2.html","icon":"","order":"1","isHeader":"0","childMenus":""}
 					]},
 					{"id":"6","name":"订单管理","parentId":"1","url":"","icon":"&#xe602;","order":"1","isHeader":"0","childMenus":[
@@ -461,7 +461,7 @@ $(function(){
 				];
     var menu2 = [{"id":"1","name":"主菜单","parentId":"0","url":"","icon":"","order":"1","isHeader":"1","childMenus":[
         {"id":"3","name":"商品管理","parentId":"1","url":"","icon":"&#xe604;","order":"1","isHeader":"0","childMenus":[
-            {"id":"4","name":"品牌管理","parentId":"3","url":"test1.html","icon":"","order":"1","isHeader":"0","childMenus":""},
+            {"id":"4","name":"表格","parentId":"3","url":"/user/index","icon":"","order":"1","isHeader":"0","childMenus":""},
             {"id":"5","name":"分类管理","parentId":"3","url":"test2.html","icon":"","order":"1","isHeader":"0","childMenus":""}
         ]},
         {"id":"6","name":"订单管理","parentId":"1","url":"","icon":"&#xe602;","order":"1","isHeader":"0","childMenus":[

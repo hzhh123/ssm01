@@ -3,17 +3,18 @@ package cn.edu.entity;
 import javax.persistence.*;
 
 /**
- * Created by Administrator on 2017/7/21.
+ * Created by Administrator on 2017/7/27.
  */
-@Table(name = "user")
 @Entity
+@Table(name = "user")
 public class User {
     private Integer id;
     private String username;
     private String password;
+    private String state;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
@@ -24,7 +25,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "username", nullable = true, length = 25)
+    @Column(name = "username")
     public String getUsername() {
         return username;
     }
@@ -34,13 +35,23 @@ public class User {
     }
 
     @Basic
-    @Column(name = "password", nullable = true, length = 128)
+    @Column(name = "password")
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Basic
+    @Column(name = "state")
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     @Override
@@ -53,6 +64,7 @@ public class User {
         if (id != null ? !id.equals(user.id) : user.id != null) return false;
         if (username != null ? !username.equals(user.username) : user.username != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (state != null ? !state.equals(user.state) : user.state != null) return false;
 
         return true;
     }
@@ -62,12 +74,7 @@ public class User {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (state != null ? state.hashCode() : 0);
         return result;
     }
-
-
-
-
-
-
 }

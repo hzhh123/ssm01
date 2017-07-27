@@ -15,5 +15,6 @@ public interface UserService {
     void deleteBatch(List<Integer> ids);
     void save(User user);
     void update(User user);
+    void updateStatue(Integer id,String state);
 
 }

@@ -12,7 +12,7 @@
 </head>
 <body>
 <script type="text/javascript">
-    location.href="/user/index";
+    location.href="/index";
 </script>
 </body>
 </html>

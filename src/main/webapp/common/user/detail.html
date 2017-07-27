@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="/assets/plugin/layui/css/layui.css">
+<form id="form" class="layui-form" style="margin-top: 25px">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label label-required">用户名</label>
+            <div class="layui-input-inline">
+                <input type="hidden" name="id" />
+                <input type="text" name="username" id="username" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" disabled>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label label-required">密码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="password" id="password" lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input" disabled>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label label-required">状态</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="state" id="state" lay-skin="switch" lay-text="ON|OFF" disabled>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/assets/plugin/jquery/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/assets/plugin/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/plugin/framework/js/global.js"></script>
+<script>
+    layui.use('form',function () {
+        var form=layui.form(),
+            $=layui.jquery;
+        var id=$.getQueryString("id");
+        if(id){
+            $.ajax({
+                url: "/user/get",
+                data: { id: id },
+                type: "post",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if(data.state=="1"){
+                        $('#state').attr("checked",true);
+                        form.render('checkbox');//这一步很关键，设置复选后还要重新渲染
+                    }
+                    $("#form").formSerialize(data);
+                }
+            });
+        }
+
+    })
+</script>

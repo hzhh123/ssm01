@@ -6,6 +6,7 @@ import cn.edu.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,7 +36,7 @@ public class UserController {
     }
     @RequestMapping("index")
     public String index(){
-        return "common/user/userlist2";
+        return "common/user/userlist";
     }
     @ResponseBody
     @RequestMapping("delete")
@@ -77,6 +78,17 @@ public class UserController {
             e.printStackTrace();
             return null;
         }
+    }
+    @ResponseBody
+    @RequestMapping("updateState")
+    public String updateState(Integer id,String state){
+        try{
+            userService.updateStatue(id,state);
+            return "success";
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

@@ -42,6 +42,10 @@ public class UserServiceImpl implements UserService {
     }
     @Transactional
     public void update(User user) {
-        userRepository.update(user.getUsername(),user.getPassword(),user.getId());
+        userRepository.update(user.getState(),user.getUsername(),user.getPassword(),user.getId());
+    }
+    @Transactional
+    public void updateStatue(Integer id, String state) {
+        userRepository.updateStatue(id,state);
     }
 }
