@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/assets/plugin/layui/css/layui.css">
+<link rel="stylesheet" href="/assets/plugin/notyf/notyf.min.css">
 <form id="form" class="layui-form" style="margin-top: 25px">
     <div class="layui-form-item">
         <div class="layui-inline">
@@ -19,7 +20,7 @@
         <div class="layui-inline">
             <label class="layui-form-label label-required">状态</label>
             <div class="layui-input-inline">
-                <input type="checkbox" name="state" id="state" lay-skin="switch" lay-text="ON|OFF">
+                <input type="checkbox" name="state" id="state" lay-skin="switch" lay-text="ON|OFF" checked>
             </div>
         </div>
     </div>
@@ -32,6 +33,7 @@
 <script type="text/javascript" src="/assets/plugin/jquery/jquery.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/assets/plugin/layui/layui.js"></script>
 <script type="text/javascript" src="/assets/plugin/framework/js/global.js"></script>
+<script type="text/javascript" src="/assets/plugin/notyf/notyf.min.js" charset="utf-8"></script>
 <script>
     layui.use('form',function () {
      var form=layui.form(),
@@ -47,11 +49,26 @@
              success: function (data) {
                  if(data.state=="1"){
                      $('#state').attr("checked",true);
-                     form.render('checkbox');//这一步很关键，设置复选后还要重新渲染
+                 }else{
+                     $('#state').attr("checked",false);
                  }
+                 form.render('checkbox');//这一步很关键，设置复选后还要重新渲染
                  $("#form").formSerialize(data);
              }
          });
+     }else {
+        $('#username').blur(function () {
+            $.ajax({
+                type:'post',
+                url:'/user/validUsername',
+                data: {"username":$('#username').val()},
+                dataType:"json",
+                success:function (data) {
+                    var notyf = new Notyf({delay:3000});
+                    notyf.confirm(data.message);
+                }
+            });
+        })
      }
     form.on('submit(add)', function (form) {
         var url="";

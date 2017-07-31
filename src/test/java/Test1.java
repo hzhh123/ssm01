@@ -55,4 +55,14 @@ public class Test1 {
        user.setUsername("dddxxx");
        userService.update(user);
     }
+    @Test
+    public void test5(){
+        User user=userService.getUserByUsername("aa").get(0);
+        System.out.println(user);
+    }
+    @Test
+    public void test6(){
+       Page<User>page=userService.page(1,5,"a");
+        System.out.println(page.getTotalElements());
+    }
 }

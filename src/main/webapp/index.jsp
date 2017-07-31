@@ -12,7 +12,7 @@
 </head>
 <body>
 <script type="text/javascript">
-    location.href="/index";
+    location.href="/toLogin";
 </script>
 </body>
 </html>

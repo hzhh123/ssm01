@@ -11,10 +11,12 @@ import java.util.List;
 public interface UserService {
     User get(Integer id);
     Page<User>page(Integer pageNo,Integer pageSize);
+    Page<User>page(Integer pageNo,Integer pageSize,String keyword);
     void delete(Integer id);
     void deleteBatch(List<Integer> ids);
     void save(User user);
     void update(User user);
     void updateStatue(Integer id,String state);
+    List<User> getUserByUsername(String username);
 
 }

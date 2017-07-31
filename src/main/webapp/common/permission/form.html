@@ -1,0 +1,127 @@
+<link rel="stylesheet" href="/assets/plugin/layui/css/layui.css">
+<link rel="stylesheet" href="/assets/plugin/notyf/notyf.min.css">
+<form id="form" class="layui-form" style="margin-top: 25px">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">编码</label>
+            <div class="layui-input-inline">
+                <input type="hidden" name="id" />
+                <input type="text" name="code" lay-verify="required" placeholder="请输入编码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">父级</label>
+            <div class="layui-input-inline">
+                <select class="select2" lay-ignore name="parentId" lay-verify="required" id="parentId" style="width: 190px">
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">连接</label>
+            <div class="layui-input-inline">
+                <input type="text" name="url" placeholder="请输入连接" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <select name="type" lay-verify="required">
+                    <option value=""></option>
+                    <option value="0">菜单</option>
+                    <option value="1">按钮</option>
+                    <option value="2">其他</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">事件</label>
+            <div class="layui-input-inline">
+                <input type="text" name="JsEvent" placeholder="请输入事件" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">图标</label>
+            <div class="layui-input-inline">
+                <input type="text" name="icon" id="Icon" placeholder="请选择图标" autocomplete="off" class="layui-input">
+            </div>
+            <button class="layui-btn layui-btn-primary" id="btnSetIcon" style="position: absolute; left: 244px;">
+                <i class="layui-icon">&#xe615;</i>
+            </button>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">排序码</label>
+            <div class="layui-input-inline">
+                <input type="number" name="sortCode" lay-verify="number" placeholder="请输入排序" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选项</label>
+        <div class="layui-input-block">
+            <input type="checkbox" lay-skin="primary" name="isEnable" value="true" title="启用" checked>
+            <input type="checkbox" lay-skin="primary" name="isEdit" value="true" title="编辑">
+            <input type="checkbox" lay-skin="primary" name="isPublic" value="true" title="公共">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block" style="width: 514px;">
+            <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-input-block">
+            <button id="btnSubmit" class="layui-btn" lay-submit lay-filter="add">提交</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/assets/plugin/jquery/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/assets/plugin/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/plugin/framework/js/global.js"></script>
+<script type="text/javascript" src="/assets/plugin/notyf/notyf.min.js" charset="utf-8"></script>
+<script>
+    layui.use('form',function () {
+     var form=layui.form(),
+     $=layui.jquery;
+     var id=$.getQueryString("id");
+     if(id){
+         $.ajax({
+             url: "/permission/get",
+             data: { id: id },
+             type: "post",
+             dataType: "json",
+             async: false,
+             success: function (data) {
+                 $("#form").formSerialize(data);
+             }
+         });
+     }
+
+    form.on('submit(add)', function (form) {
+        var url="";
+        if(form.field.id==""){
+            url= "/permission/save";
+        }else{
+            url= "/permission/update";
+        }
+        $.formSubmit({
+            type:'post',
+            url:url,
+            data: form.field
+        });
+        return false;
+    });
+    })
+</script>

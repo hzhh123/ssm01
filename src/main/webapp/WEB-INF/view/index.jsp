@@ -38,9 +38,9 @@
             <li class="layui-nav-item"><a href="">大数据</a></li>
             <li class="layui-nav-item"><a href="">社区</a></li>
             <li class="layui-nav-item">
-                <a href="javascript:;">解决方案</a>
+                <a href="javascript:;">${sessionScope.loginUser.username}</a>
                 <dl class="layui-nav-child">
-                    <dd><a href="">移动模块xxxxxxxxxx</a></dd>
+                    <dd><a href="/logout"><i class="fa fa-circle-o-notch"></i> 注销</a></dd>
                     <dd><a href="">后台模版</a></dd>
                     <dd class="layui-this"><a href="">选中项</a></dd>
                     <dd><a href="">电商平台</a></dd>
