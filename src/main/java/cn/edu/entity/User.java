@@ -1,20 +1,25 @@
 package cn.edu.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/7/27.
  */
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements Serializable{
     private Integer id;
     private String username;
     private String password;
     private String state;
     private Timestamp createtime;
     private Timestamp updatetime;
+    private List<Role> roles;
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,31 +79,17 @@ public class User {
     public void setUpdatetime(Timestamp updatetime) {
         this.updatetime = updatetime;
     }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User that = (User) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (username != null ? !username.equals(that.username) : that.username != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (state != null ? !state.equals(that.state) : that.state != null) return false;
-        if (createtime != null ? !createtime.equals(that.createtime) : that.createtime != null) return false;
-        if (updatetime != null ? !updatetime.equals(that.updatetime) : that.updatetime != null) return false;
-
-        return true;
+    @JsonIgnore
+    @JoinTable(name = "user_role",joinColumns = {@JoinColumn(name = "userid",referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "roleid",referencedColumnName = "id")})
+    @ManyToMany(fetch = FetchType.LAZY)
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (state != null ? state.hashCode() : 0);
-        result = 31 * result + (createtime != null ? createtime.hashCode() : 0);
-        result = 31 * result + (updatetime != null ? updatetime.hashCode() : 0);
-        return result;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
+
+
 }

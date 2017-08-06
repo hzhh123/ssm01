@@ -1,0 +1,8 @@
+jpa中getOne与hibernate的load方法类似，都是懒加载，findOne和hibernate中的get方法类似，是立即加载
+boolean对应的mysql字段类型为bit，必须赋默认值，如b'1'或b'0'
+
+jpa中所有的查询这里设置为懒加载，还有外键关联关系进行json处理时需要使用@JsonIgnore不进行json序列化，否则springmvc会出现json转换异常
+
+jpa查询时要设置别名
+
+文件在线预览

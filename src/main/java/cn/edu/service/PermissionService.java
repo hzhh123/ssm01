@@ -15,5 +15,8 @@ public interface PermissionService {
     void update(Permission permission);
     Permission get(Integer id);
     Page<Permission>page(Integer pageIndex,Integer pageSize);
-    Page<Permission>page(Integer pageIndex,Integer pageSize,String keyword);
+    Page<Permission>page(Integer pageIndex, Integer pageSize, String keyword);
+    List<Permission>getPermissions(List<Integer>roleids);
+    List<Permission>getPermissionByIsPublic(String isPublic);
+    List<Permission>findAllById(List<Integer>ids);
 }

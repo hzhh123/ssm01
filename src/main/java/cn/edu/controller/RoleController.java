@@ -1,7 +1,7 @@
 package cn.edu.controller;
 
-import cn.edu.entity.Permission;
-import cn.edu.service.PermissionService;
+import cn.edu.entity.Role;
+import cn.edu.service.RoleService;
 import cn.edu.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,24 +15,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2017/7/31.
+ * Created by Administrator on 2017/8/1.
  */
 @Controller
-@RequestMapping("permission")
-public class PermissionController {
+@RequestMapping("role")
+public class RoleController {
     @Autowired
-    private PermissionService permissionService;
+    private RoleService roleService;
     @RequestMapping
     public String index(){
-        return "common/permission/index";
+        return "common/role/index";
     }
 
     @RequestMapping("save")
     public @ResponseBody
-    Map<String,Object>save(Permission permission){
+    Map<String,Object> save(Role role){
         Map<String,Object>map=new HashMap<String,Object>();
         try{
-            permissionService.save(permission);
+            roleService.save(role);
             map.put("message","添加成功！");
             map.put("state","success");
         }catch (Exception e){
@@ -45,7 +45,7 @@ public class PermissionController {
     Map<String,Object>delete(Integer id){
         Map<String,Object>map=new HashMap<String,Object>();
         try{
-           permissionService.delete(id);
+            roleService.delete(id);
             map.put("message","删除成功！");
             map.put("state","success");
         }catch (Exception e){
@@ -58,8 +58,8 @@ public class PermissionController {
     Map<String,Object>deleteBatch(@RequestParam("ids[]")String ids){
         Map<String,Object>map=new HashMap<String,Object>();
         try{
-            List<Integer>_ids= StringUtil.toList(ids);
-            permissionService.deleteBatch(_ids);
+            List<Integer> _ids= StringUtil.toList(ids);
+            roleService.deleteBatch(_ids);
             map.put("message","删除成功！");
             map.put("state","success");
         }catch (Exception e){
@@ -69,10 +69,10 @@ public class PermissionController {
     }
     @RequestMapping("update")
     public @ResponseBody
-    Map<String,Object>update(Permission permission){
+    Map<String,Object>update(Role role){
         Map<String,Object>map=new HashMap<String,Object>();
         try{
-            permissionService.update(permission);
+            roleService.update(role);
             map.put("message","修改成功！");
             map.put("state","success");
         }catch (Exception e){
@@ -83,15 +83,15 @@ public class PermissionController {
 
     @RequestMapping("list")
     @ResponseBody
-    public Page<Permission>list(Integer pageIndex, Integer pageSize, String keyword){
+    public Page<Role> list(Integer pageIndex, Integer pageSize, String keyword){
         if(!keyword.trim().equals("")){
-            return permissionService.page(pageIndex,pageSize,keyword);
+            return roleService.page(pageIndex,pageSize,keyword);
         }
-        return permissionService.page(pageIndex,pageSize);
+        return roleService.page(pageIndex,pageSize);
     }
     @ResponseBody
     @RequestMapping("get")
-    public Permission get(Integer id){
-        return permissionService.get(id);
+    public Role get(Integer id){
+        return roleService.get(id);
     }
 }

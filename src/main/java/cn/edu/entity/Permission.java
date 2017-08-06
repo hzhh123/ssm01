@@ -1,14 +1,18 @@
 package cn.edu.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/7/31.
  */
 @Entity
 @Table(name = "permission")
-public class Permission {
+public class Permission implements Serializable{
     private Integer id;
     private Integer parentId;
     private String code;
@@ -18,15 +22,15 @@ public class Permission {
     private String jsEvent;
     private String icon;
     private String sortCode;
-    private boolean isPublic;
-    private boolean isEnable;
-    private boolean isEdit;
+    private String isPublic="0";
+    private String isEnable="0";
+    private String classname;
     private String remark;
     private Timestamp createtime;
     private Timestamp modifytime;
+    private List<Role>roles;
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
@@ -35,9 +39,6 @@ public class Permission {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    @Basic
-    @Column(name = "parentId")
     public Integer getParentId() {
         return parentId;
     }
@@ -46,8 +47,6 @@ public class Permission {
         this.parentId = parentId;
     }
 
-    @Basic
-    @Column(name = "code")
     public String getCode() {
         return code;
     }
@@ -56,8 +55,6 @@ public class Permission {
         this.code = code;
     }
 
-    @Basic
-    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -66,8 +63,6 @@ public class Permission {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "url")
     public String getUrl() {
         return url;
     }
@@ -76,8 +71,6 @@ public class Permission {
         this.url = url;
     }
 
-    @Basic
-    @Column(name = "type")
     public String getType() {
         return type;
     }
@@ -86,8 +79,6 @@ public class Permission {
         this.type = type;
     }
 
-    @Basic
-    @Column(name = "jsEvent")
     public String getJsEvent() {
         return jsEvent;
     }
@@ -96,8 +87,6 @@ public class Permission {
         this.jsEvent = jsEvent;
     }
 
-    @Basic
-    @Column(name = "icon")
     public String getIcon() {
         return icon;
     }
@@ -106,8 +95,6 @@ public class Permission {
         this.icon = icon;
     }
 
-    @Basic
-    @Column(name = "sortCode")
     public String getSortCode() {
         return sortCode;
     }
@@ -116,38 +103,32 @@ public class Permission {
         this.sortCode = sortCode;
     }
 
-    @Basic
-    @Column(name = "isPublic")
-    public boolean getIsPublic() {
+    @Column(name = "is_public")
+    public String getIsPublic() {
         return isPublic;
     }
 
-    public void setIsPublic(boolean isPublic) {
+    public void setIsPublic(String isPublic) {
         this.isPublic = isPublic;
     }
-
-    @Basic
-    @Column(name = "isEnable")
-    public boolean getIsEnable() {
+    @Column(name = "is_enable")
+    public String getIsEnable() {
         return isEnable;
     }
 
-    public void setIsEnable(boolean isEnable) {
+    public void setIsEnable(String isEnable) {
         this.isEnable = isEnable;
     }
 
-    @Basic
-    @Column(name = "isEdit")
-    public boolean getIsEdit() {
-        return isEdit;
+    public String getClassname() {
+        return classname;
     }
 
-    public void setIsEdit(boolean isEdit) {
-        this.isEdit = isEdit;
+    public void setClassname(String classname) {
+        this.classname = classname;
     }
 
-    @Basic
-    @Column(name = "remark")
+    @Column(name = "remark",length = 1024)
     public String getRemark() {
         return remark;
     }
@@ -156,8 +137,6 @@ public class Permission {
         this.remark = remark;
     }
 
-    @Basic
-    @Column(name = "createtime")
     public Timestamp getCreatetime() {
         return createtime;
     }
@@ -166,14 +145,31 @@ public class Permission {
         this.createtime = createtime;
     }
 
-    @Basic
-    @Column(name = "modifytime")
     public Timestamp getModifytime() {
         return modifytime;
     }
 
     public void setModifytime(Timestamp modifytime) {
         this.modifytime = modifytime;
+    }
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "permissions",fetch = FetchType.LAZY)
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Permission permission=(Permission)obj;
+        if(this.id==permission.id&&this.code.equals(permission.getCode())&&this.url.equals(permission.getUrl())){
+            return true;
+        }
+        return false;
     }
 
 

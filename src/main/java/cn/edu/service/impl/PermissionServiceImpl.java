@@ -30,13 +30,14 @@ public class PermissionServiceImpl implements PermissionService {
     }
     @Transactional
     public void update(Permission permission) {
-        permissionRepository.update(permission.getId(),permission.getParentId(),permission.getCode(),permission.getName(),
-                permission.getUrl(),permission.getType(),permission.getJsEvent(),permission.getIcon(),permission.getSortCode()
-        ,permission.getIsPublic(),permission.getIsEnable(),permission.getIsEdit(),permission.getRemark(),permission.getCreatetime(),permission.getModifytime());
+        permissionRepository.update(permission.getParentId(),permission.getCode(),permission.getName(),
+                permission.getUrl(),permission.getType(),permission.getIcon(),permission.getJsEvent(),
+                permission.getSortCode(),permission.getRemark(),permission.getClassname(),permission.getIsPublic(),permission.getIsEnable(),
+                permission.getCreatetime(),permission.getModifytime(),permission.getId());
     }
     @Transactional(readOnly = true)
     public Permission get(Integer id) {
-        return null;
+        return permissionRepository.findOne(id);
     }
     @Transactional(readOnly = true)
     public Page<Permission> page(Integer pageIndex, Integer pageSize) {
@@ -62,5 +63,17 @@ public class PermissionServiceImpl implements PermissionService {
     @Transactional
     public void deleteBatch(List<Integer> ids) {
         permissionRepository.deleteBatch(ids);
+    }
+    @Transactional(readOnly = true)
+    public List<Permission> getPermissions(List<Integer> roleids) {
+        return permissionRepository.getPermissions(roleids);
+    }
+    @Transactional(readOnly = true)
+    public List<Permission> getPermissionByIsPublic(String isPublic) {
+        return permissionRepository.getPermissionByIsPublic(isPublic);
+    }
+    @Transactional(readOnly = true)
+    public List<Permission> findAllById(List<Integer> ids) {
+        return permissionRepository.findAllById(ids);
     }
 }

@@ -39,7 +39,7 @@ public class UserController {
         }
         return userService.page(pageIndex,pageSize);
     }
-    @RequestMapping("index")
+    @RequestMapping
     public String index(){
         return "common/user/userlist";
     }

@@ -18,12 +18,16 @@ public interface PermissionRepository extends JpaRepository<Permission,Integer>,
     @Query("delete from Permission u where u.id in(:ids)")
     void deleteBatch(@Param("ids") List<Integer> ids);
     @Modifying
-    @Query("update Permission p set p.parentId=:parentId,p.code=:code,p.icon=:icon,p.isEdit=:isEdit,p.isPublic=:isPublic," +
-            "p.isEnable=:isEnable,p.sortCode=:sortCode,p.name=:name,p.createtime=:createtime,p.modifytime=:modifytime,p.jsEvent=:jsEvent," +
-            "p.type=:type,p.url=:url,p.remark=:remark where p.id=:id")
-    void update(@Param("id")Integer id, @Param("parentId")Integer parentId, @Param("code")String code,
-                @Param("name")String name, @Param("url")String url, @Param("type")String type, @Param("jsEvent")String jsEvent,
-                @Param("icon")String icon, @Param("sortCode")String sortCode, @Param("isPublic")boolean isPublic,
-                @Param("isEnable")boolean isEnable, @Param("isEdit")boolean isEdit,
-                @Param("remark")String remark, @Param("createtime")Timestamp createtime,@Param("modifytime")Timestamp modifytime);
+    @Query("update Permission p set p.parentId=?1,p.code=?2,p.name=?3,p.url=?4,p.type=?5,p.icon=?6,p.jsEvent=?7," +
+            "p.sortCode=?8,p.remark=?9,p.classname=?10,p.isPublic=?11,p.isEnable=?12,p.createtime=?13,p.modifytime=?14 where p.id=?15")
+    void update(Integer parentId,String code,String name,String url,String type,String icon,String jsEvent,String sortCode,
+                String remark,String classname,String isPublic,String isEnable,Timestamp createtime,Timestamp modifytime,Integer id);
+    @Query(value = "select p from  Permission p where p.id in(?1)")
+    List<Permission>getPermissions(List<Integer>permissionids);
+
+    List<Permission>getPermissionByIsPublic(String isPublic);
+
+    @Query("select p from Permission p where p.id in(?1)")
+    List<Permission>findAllById(List<Integer>ids);
+
 }

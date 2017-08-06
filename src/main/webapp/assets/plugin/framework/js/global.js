@@ -208,41 +208,7 @@ $.fn.bindChangeEvent = function ($event) {
     });
 },
 
-/**
- * 控制授权按钮显示隐藏。
- */
-$.fn.authorizeButton = function () {
-    var url = top.$("iframe:visible").attr("src");
-    var modules = top.client.permission;
-    var module = {};
-    var childModules = [];
-    for (var i = 0; i < modules.length; i++) {
-        if (modules[i].Url != "") {
-            if (url == modules[i].Url) {
-                module = modules[i];
-            }
-        }
-    }
-    for (var i = 0; i < modules.length; i++) {
-        if (modules[i].Url != "") {
-            if (modules[i].ParentId == module.Id) {
-                childModules.push(modules[i]);
-            }
-        }
-    }
-    if (childModules.length > 0) {
-        var $toolbar = $(this);
-        var _buttons = '';
-        $.each(childModules, function (index, item) {
-            _buttons += "<button id='" + item.EnCode + "' onclick='" + item.JsEvent + "' class=\"layui-btn layui-btn-primary layui-btn-small\">";
-            _buttons += "   <i class='" + item.Icon + "' aria-hidden='true'></i> " + item.Name + "";
-            _buttons += "</button>";
-        });
-        $toolbar.find('.layui-btn-group:last').html(_buttons);
-    } else {
-        $toolbar.css('height', '50px');
-    }
-}
+
 
 /**
  * 获取数据表格选中行主键值。
@@ -266,7 +232,62 @@ $.fn.gridRemoveSelectedRow= function () {
         }
     }
 }
+/**
+ * 控制授权按钮显示隐藏。
+ */
+$.fn.authorizeButton = function () {
+    var url = top.$("iframe:visible").attr("src");
+    var $toolbar = $(this);
+    $.ajax({
+        url:'/auth',
+        dataType:'json',
+        type:'post',
+        success:function (data) {
+            var modules = data;
+            var module = {};
+            var childModules = [];
+            for (var i = 0; i < modules.length; i++) {
+                if (modules[i].url != "") {
+                    if (url == modules[i].url) {
+                        module = modules[i];
+                    }
+                }
+            }
 
+            for (var i = 0; i < modules.length; i++) {
+                if (modules[i].url != "") {
+                    if (modules[i].parentId == module.id&&modules[i].type=='1') {
+                        childModules.push(modules[i]);
+                    }
+                }
+            }
+            if (childModules.length > 0) {
+                //排序
+                var sortCodes=new Array();
+                $.each(childModules, function (index, item){
+                    sortCodes.push(item.sortCode);
+                });
+                sortCodes=sortCodes.sort();
+                var _childModules=[];
+                for (var i=0;i<sortCodes.length;i++){
+                    for (var j=0;j<childModules.length;j++){
+                        if(sortCodes[i]===childModules[j].sortCode){
+                            _childModules.push(childModules[j]);
+                        }
+                    }
+
+                }
+                var _buttons = '';
+                $.each(_childModules, function (index, item) {
+                    _buttons += "<button id='" + item.code + "' onclick='" + item.jsEvent + "' class=\"layui-btn layui-btn-small  "+item.classname+"\">";
+                    _buttons += "   <i class='" + item.icon + "' aria-hidden='true'></i> " + item.name + "";
+                    _buttons += "</button>";
+                });
+                $toolbar.html(_buttons);
+            }
+        }
+    })
+}
 /**
  * 获取URL指定参数值。
  * @param {String} name

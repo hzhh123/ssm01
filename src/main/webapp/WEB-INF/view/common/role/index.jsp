@@ -40,10 +40,10 @@
 </head>
 <body style="padding: 10px;">
 
-<div class="layui-btn-group" id="toolbar" style="height: 30px;">
-    <%--<button class="layui-btn layui-btn-normal layui-btn-small" onclick="btn_add()">添加</button>--%>
-    <%--<button class="layui-btn layui-btn-default layui-btn-small" onclick="btn_del()">删除</button>--%>
-    <%--<button class="layui-btn layui-btn-default layui-btn-small" onclick="btn_edit()">修改</button>--%>
+<div class="layui-btn-group">
+    <button class="layui-btn layui-btn-normal layui-btn-small" onclick="add()">添加</button>
+    <button class="layui-btn layui-btn-default layui-btn-small" onclick="del()">删除</button>
+    <button class="layui-btn layui-btn-default layui-btn-small" onclick="edit()">修改</button>
 </div>
 <div class="toolbar" >
     <input type="text" class="layui-input" id="searach"  placeholder="search..">
@@ -55,16 +55,9 @@
         <thead>
         <tr>
             <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose"></th>
-            <th>编码</th>
-            <th>图标</th>
-            <th>名称</th>
-            <th>连接</th>
-            <th>类型</th>
-            <th>排序码</th>
-            <th>CSS类名</th>
-            <th>公共</th>
+            <th>角色</th>
             <th>状态</th>
-            <th>备注</th>
+            <th>描述</th>
         </tr>
         </thead>
         <tbody id="t1"></tbody>
@@ -81,36 +74,16 @@
     <tr>
         <td>
             <input type="checkbox" lay-skin="primary" value="{{item.id}}"></td>
-        <td>{{# if(item.code==null){ }}
-            {{# }else{ }}{{item.code}}
+        <td>{{# if(item.rolename==null){ }}
+            {{# }else{ }}{{item.rolename}}
             {{# } }}
         </td>
-        <td><i class="{{item.icon}}"></i></td>
-        <td>{{item.name}}</td>
-        <td>{{# if(item.url==null){ }}无
-            {{# }else{ }}{{item.url}}
-            {{# } }}
-        </td>
-        <td>{{# if(item.type==0){ }} 菜单
-            {{# }else if(item.type==1){ }} 按钮
-            {{# }else{ }} 其他
-            {{# } }}
-        </td>
-        <td>{{item.sortCode}}</td>
-        <td>{{# if(item.classname==null){ }}
-            {{# }else{ }}{{item.classname}}
-            {{# } }}
-        </td>
-        <td>{{# if(item.isPublic==true){ }}  <span class="label label-success label-sm">是</span>
-            {{# }else{ }}  <span class="label label-info label-sm">否</span>
-            {{# } }}
-        </td>
-        <td>{{# if(item.isEnable==true){ }}  <span class="label label-success label-sm">启用</span>
+        <td>{{# if(item.state==true){ }}  <span class="label label-success label-sm">启用</span>
             {{# }else{ }}  <span class="label label-info label-sm">禁用</span>
             {{# } }}
         </td>
-        <td>{{# if(item.remark==null){ }}无
-            {{# }else{ }}{{item.remark}}
+        <td>{{# if(item.desc==null){ }}
+            {{# }else{ }}{{item.desc}}
             {{# } }}
         </td>
     </tr>
@@ -122,10 +95,6 @@
     {{# } }}
 </script>
 <script type="text/javascript">
-
-    $(function () {
-        $("#toolbar").authorizeButton();
-    })
     function init() {
         layui.use(['form','laypage','laytpl'], function(){
             var $ = layui.jquery, form = layui.form(),laypage = layui.laypage;
@@ -164,7 +133,7 @@
             }
             function getJson(curr) {
                 $.ajax({
-                    url: '/permission/list',
+                    url: '/role/list',
                     data: {"pageSize": 5, "pageIndex": curr||1,"keyword":$('#searach').val()},
                     dataType: 'json',
                     success: function (data) {
@@ -184,7 +153,7 @@
                                     $('#allChoose').attr('checked', false);
                                     var curr = obj.curr;
                                     $.ajax({
-                                        url: '/permission/list',
+                                        url: '/role/list',
                                         data: {"pageSize": 5, "pageIndex": curr,"keyword":$('#searach').val()},
                                         dataType: 'json',
                                         success: function (data) {
@@ -210,22 +179,25 @@
                 });
                 form.render('checkbox');
             });
+
         });
     }
 
     init();
-    function btn_del() {
+    function del() {
         var ids =getPrimaryKey("gridList");
+        console.log(ids);
         if (ids.length <= 0) {
             $.layerMsg("请勾选要删除的记录。", "warning");
             return;
         }else {
             $.ajax({
-                url:'/permission/deleteBatch',
+                url:'/role/deleteBatch',
                 data:{"ids":ids},
                 dataType:'json',
                 type:'post',
                 success:function (data) {
+                    console.log(data);
                     if(data.state=="success"){
                         $.layerMsg('删除成功!','success');
                         // $("#gridList").gridRemoveSelectedRow();
@@ -236,14 +208,14 @@
         }
     }
 
-    function btn_add() {
+    function add() {
         $.layerOpen({
             id: "add",
-            title: "<i class='fa fa-plus'></i> 新增权限",
+            title: "<i class='fa fa-plus'></i> 新增角色",
             width: "670px",
             height: "530px",
             shadeClose:false,
-            content: "/common/permission/form.html",
+            content: "/common/role/form.html",
             yes: function (iBody) {
                 iBody.find('#btnSubmit').click();
                 init();
@@ -257,18 +229,19 @@
         })
         return result;
     }
-    function btn_edit() {
+    function edit() {
         var ids = getPrimaryKey("gridList");
+        console.log(ids)
         if (ids.length != 1) {
             $.layerMsg("请勾选要编辑的记录且条数只能为一。", "warning");
             return;
         }else {
             $.layerOpen({
                 id: "edit",
-                title: "<i class='fa fa-edit'></i> 编辑权限",
+                title: "<i class='fa fa-edit'></i> 编辑角色",
                 width: "670px",
                 height: "530px",
-                content: "/common/permission/form.html?id="+ids[0],
+                content: "/common/role/form.html?id="+ids[0],
                 yes: function (iBody) {
                     iBody.find('#btnSubmit').click();
                     init();
@@ -281,10 +254,10 @@
     function view(id) {
         $.layerOpen({
             id: "view",
-            title: "<i class='fa fa-search'></i> 查看权限",
+            title: "<i class='fa fa-search'></i> 查看角色",
             width: "670px",
             height: "250px",
-            content: "/common/user/detail.html?id="+id,
+            content: "/common/role/detail.html?id="+id,
             btn:null
         });
     }

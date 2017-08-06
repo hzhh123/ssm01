@@ -38,15 +38,18 @@
         layui.use('form',function () {
                 var form=layui.form(),
                     $=layui.jquery;
+            if (window != top)
+                top.location.href = location.href;
             form.on('submit(login)',function (form) {
-                $.formSubmit({
+                $.ajax({
                     type:'post',
                     url:'/login',
                     showMsg:false,
-                    data: form.field,
+                    data: $('#form').serialize(),
                     success:function (data) {
-                        console.log(data);
-                        if(data=="success"){
+                        var d=eval(data);
+                        console.log(d=="1");
+                        if(d=="1"){
                             location.href="/index";
                         }else{
                             $.layerMsg("密码或用户名不对！",'warning');
@@ -54,7 +57,8 @@
                     }
                 });
                 return false;
-            })
+            });
+
         })
     </script>
 </body>

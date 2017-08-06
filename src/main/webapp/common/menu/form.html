@@ -1,0 +1,134 @@
+<link rel="stylesheet" href="/assets/plugin/layui/css/layui.css">
+<link rel="stylesheet" href="/assets/plugin/notyf/notyf.min.css">
+<form id="form" class="layui-form" style="margin-top: 25px">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">菜单名</label>
+            <div class="layui-input-inline">
+                <input type="hidden" name="id" />
+                <input type="text" name="name" lay-verify="required" placeholder="请输入菜单名" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">父菜单</label>
+            <div class="layui-input-inline">
+                <select   name="parentid" lay-verify="required" id="parentid" >
+                    <option value="">请选择</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">图标</label>
+            <div class="layui-input-inline">
+                <input type="text" name="icon"  placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">连接</label>
+            <div class="layui-input-inline">
+                <input type="text" name="url"  placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">选项</label>
+            <div class="layui-input-block">
+                <input type="checkbox" lay-skin="primary" name="state" value="1" title="显示" checked>
+                <input type="checkbox" lay-skin="primary" name="isheader" value="1" title="isHeader">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">排序码</label>
+            <div class="layui-input-inline">
+                <input type="number" name="order" lay-verify="number" placeholder="请输入排序码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-input-block">
+            <button id="btnSubmit" class="layui-btn" lay-submit lay-filter="add">提交</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/assets/plugin/jquery/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/assets/plugin/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/plugin/framework/js/global.js"></script>
+<script type="text/javascript" src="/assets/plugin/notyf/notyf.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/assets/plugin/framework/js/serializeObject.js" charset="utf-8"></script>
+<script>
+    layui.use('form',function () {
+        var form=layui.form(),
+            $=layui.jquery;
+        var id=$.getQueryString("id");
+        $.ajax({
+            url: "/menu/findAll",
+            type: "post",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                if(data.length>0){
+                    $.each(data,function (index,item) {
+                        $('#parentid').append("<option value="+item.id+">"+item.name+"</option>");
+                    });
+                }
+                form.render('select');
+            }
+        });
+        if(id){
+            $.ajax({
+                url: "/menu/get",
+                data: { id: id },
+                type: "post",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if(data.state=="1"){
+                        $('input[name=state]').attr("checked",true);
+                    }else{
+                        $('input[name=state]').attr("checked",false);
+                    }
+                    $('[name=parentid]').find('option').each(function (index,item) {
+                        console.log(data.parentid)
+                        console.log(item.value)
+                        if(data.parentid==Number(item.value)){
+                            item.selected=true;
+                        }
+                    })
+                    layui.form().render('select');
+                    form.render('checkbox');//这一步很关键，设置复选后还要重新渲染
+                    $("#form").formSerialize(data);
+                }
+            });
+        }
+
+        form.on('submit(add)', function (form) {
+            var url="";
+            if(form.field.id==""){
+                url= "/menu/save";
+            }else{
+                url= "/menu/update";
+            }
+            var state="0";
+            var isheader="0";
+            if(  $('input[name=state]').next().hasClass('layui-form-checked')){
+                state="1";
+            }
+            if(  $('input[name=isheader]').next().hasClass('layui-form-checked')){
+                isheader="1";
+            }
+            form.field.state=state;
+            form.field.isheader=isheader;
+            $.formSubmit({
+                type:'post',
+                url:url,
+                data: form.field
+            });
+            return false;
+        });
+    })
+</script>

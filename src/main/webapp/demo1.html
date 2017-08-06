@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<select id="s1">
+    <option value="0">招标文件</option>
+    <option value="1">预审文件</option>
+</select>
+<table border="1">
+    <tr>
+        <td>招标费</td>
+        <td><input type="text" id="zhaopiao"><div id="h1" style="width:100px;" hidden></div></td>
+        <td>预审费</td>
+        <td><input type="text" id="yushen" hidden><div id="h2" style="width: 100px;"></div></td>
+    </tr>
+</table>
+
+
+<script type="text/javascript" src="assets/plugin/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#s1').change(function () {
+            if($(this).val()=='0'){
+                $('#zhaopiao').show();
+                $('#h1').hide();
+                $('#yushen').hide();
+                $('#h2').show();
+            }else{
+                $('#zhaopiao').hide();
+                $('#h1').show();
+                $('#yushen').show();
+                $('#h2').hide();
+            }
+        })
+    })
+</script>
+</body>
+</html>

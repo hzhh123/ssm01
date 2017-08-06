@@ -72,4 +72,12 @@ public class UserServiceImpl implements UserService {
         Page<User> page=userRepository.findAll(specification,pageable);
         return page;
     }
+    @Transactional
+    public void insert(Integer userid, Integer roleid) {
+        userRepository.insert(userid,roleid);
+    }
+    @Transactional(readOnly = true)
+    public List<Integer> getRoleids(Integer userid) {
+        return userRepository.getRoleids(userid);
+    }
 }

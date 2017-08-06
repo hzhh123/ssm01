@@ -44,14 +44,14 @@ function addIframe(cur){
 	if (h == "" || $.trim(h).length == 0) {
 		return false;
 	}
-	
+
 	var fullWidth = $(window).width();
 	if(fullWidth >= 750){
 		$(".layout-side").show();
 	}else{
 		$(".layout-side").hide();
 	}
-	
+
 	$(".content-tab").each(function() {
 		if ($(this).data("id") == h) {
 			if (!$(this).hasClass("active")) {
@@ -263,39 +263,38 @@ function closePage() {
 		});
 		addTab($(".content-tab.active"))
 	}
-	return false
+	return false;
 }
 
 
 /*循环菜单*/
 function initMenu(menu,parent){
-	for(var i=0; i<menu.length; i++){   
-		var item = menu[i];
-		var str = "";
-		try{
-			if(item.isHeader == "1"){
-				str = "<li class='menu-header'>"+item.name+"</li>";
-				$(parent).append(str);
-				if(item.childMenus != ""){
-					initMenu(item.childMenus,parent);
-				}
-			}else{
-				item.icon == "" ? item.icon = "&#xe610" : item.icon = item.icon;
-				if(item.childMenus == ""){
-					str = "<li><a href='"+item.url+"'><i class='icon-font'>"+item.icon+"</i><span>"+item.name+"</span></a></li>";
-					$(parent).append(str);
-				}else{
-					str = "<li><a href='"+item.url+"'><i class='icon-font '>"+item.icon+"</i><span>"+item.name+"</span><i class='icon-font icon-right'>&#xe60b;</i></a>";
-					str +="<ul class='menu-item-child' id='menu-child-"+item.id+"'></ul></li>";
-					$(parent).append(str);
-					var childParent = $("#menu-child-"+item.id);
-					initMenu(item.childMenus,childParent);
-				}
-			}
-		}catch(e){}
-	}
+    for(var i=0; i<menu.length; i++){
+        var item = menu[i];
+        var str = "";
+        try{
+            if(item.isHeader == "1"){
+                str = "<li class='menu-header'>"+item.name+"</li>";
+                $(parent).append(str);
+                if(item.childMenus != ""){
+                    initMenu(item.childMenus,parent);
+                }
+            }else{
+                item.icon == "" ? item.icon = "&#xe610" : item.icon = item.icon;
+                if(item.childMenus == ""){
+                    str = "<li><a href='"+item.url+"'><i class='icon-font'>"+item.icon+"</i><span>"+item.name+"</span></a></li>";
+                    $(parent).append(str);
+                }else{
+                    str = "<li><a href='"+item.url+"'><i class='icon-font '>"+item.icon+"</i><span>"+item.name+"</span><i class='icon-font icon-right'>&#xe60b;</i></a>";
+                    str +="<ul class='menu-item-child' id='menu-child-"+item.id+"'></ul></li>";
+                    $(parent).append(str);
+                    var childParent = $("#menu-child-"+item.id);
+                    initMenu(item.childMenus,childParent);
+                }
+            }
+        }catch(e){}
+    }
 }
-
 
 
 /*头部下拉框移入移出*/
@@ -415,19 +414,18 @@ $(document).on("click",".layout-side-arrow",function(){
 */
 $(function(){
 
-    $('.header li').not('.header-dropdown').each(function (index,item) {
-        var _this=$(this).clone().removeClass('header-bar-nav');
-        $('.min-menu-panel ul').append(_this);
-    })
-		
+
+
 	/*获取皮肤*/
 	//getSkinByCookie();
 	//$('.layout-main').height($(window).height()-45);
 	/*菜单json*/
 	var menu1 = [{"id":"1","name":"主菜单","parentId":"0","url":"","icon":"","order":"1","isHeader":"1","childMenus":[
 					{"id":"3","name":"商品管理","parentId":"1","url":"","icon":"&#xe604;","order":"1","isHeader":"0","childMenus":[
-						{"id":"4","name":"用户管理","parentId":"3","url":"/user/index","icon":"","order":"1","isHeader":"0","childMenus":""},
-						{"id":"5","name":"权限管理","parentId":"3","url":"/permission","icon":"","order":"1","isHeader":"0","childMenus":""}
+						{"id":"4","name":"用户管理","parentId":"3","url":"/user","icon":"","order":"1","isHeader":"0","childMenus":""},
+						{"id":"5","name":"权限管理","parentId":"3","url":"/permission","icon":"","order":"1","isHeader":"0","childMenus":""},
+                        {"id":"111","name":"角色管理","parentId":"3","url":"/role","icon":"","order":"1","isHeader":"0","childMenus":""},
+                        {"id":"112","name":"菜单管理","parentId":"3","url":"/menu","icon":"","order":"1","isHeader":"0","childMenus":""}
 					]},
 					{"id":"6","name":"订单管理","parentId":"1","url":"","icon":"&#xe602;","order":"1","isHeader":"0","childMenus":[
 						{"id":"7","name":"已付款","parentId":"6","url":"home3.html","icon":"","order":"1","isHeader":"0","childMenus":""},
@@ -456,62 +454,20 @@ $(function(){
 				]},
 				{"id":"24","name":"框架案例1","parentId":"0","url":"","icon":"","order":"2","isHeader":"1","childMenus":[
 					{"id":"25","name":"新功能","parentId":"24","url":"","icon":"","order":"1","isHeader":"0","childMenus":""},
-					
+
 				]}
 				];
-    var menu2 = [{"id":"1","name":"主菜单","parentId":"0","url":"","icon":"","order":"1","isHeader":"1","childMenus":[
-        {"id":"3","name":"商品管理","parentId":"1","url":"","icon":"&#xe604;","order":"1","isHeader":"0","childMenus":[
-            {"id":"4","name":"表格","parentId":"3","url":"/user/index","icon":"","order":"1","isHeader":"0","childMenus":""},
-            {"id":"5","name":"分类管理","parentId":"3","url":"test2.html","icon":"","order":"1","isHeader":"0","childMenus":""}
-        ]},
-        {"id":"6","name":"订单管理","parentId":"1","url":"","icon":"&#xe602;","order":"1","isHeader":"0","childMenus":[
-            {"id":"7","name":"已付款","parentId":"6","url":"home3.html","icon":"","order":"1","isHeader":"0","childMenus":""},
-            {"id":"8","name":"未付款","parentId":"6","url":"home4.html","icon":"","order":"1","isHeader":"0","childMenus":""}
-        ]}
-    ]},
 
-        {"id":"24","name":"框架案例1","parentId":"0","url":"","icon":"","order":"2","isHeader":"1","childMenus":[
-            {"id":"25","name":"新功能","parentId":"24","url":"","icon":"","order":"1","isHeader":"0","childMenus":""},
-
-        ]}
-    ];
-	var menu=menu1;
-    $('.header.header-bar a').not('.header-dropdown>a').click(function () {
-        if($('.header-dropdown-menu li').hasClass('active')){
-            $('.header-dropdown').removeClass('isActive');
+	$.ajax({
+		url:'/menu/getMenus',
+		dataType:'json',
+		type:'post',
+		success:function (data) {
+            initMenu(data,$(".side-menu"));
+            $(".side-menu > li").addClass("menu-item");
         }
-        $('.header.header-bar').find('.active').removeClass('active');
-        $('.min-menu-panel ul').find('.active').removeClass('active');
-        var href=$(this).attr('href');
-        $('.min-menu-panel a[href='+href+']').parent().addClass('active');
-        $(this).parent().addClass('active');
-        $('.side-menu').html('');
-        initMenu(menu2,$(".side-menu"));
-        $(".side-menu > li").addClass("menu-item");
-        return false;//阻止href提交
-    });
-    $('.min-menu-panel ul a').click(function () {
-		$('.min-menu-panel').find('.active').removeClass('active');
-		$(this).parent().addClass('active');
-        $('.header.header-bar').find('.active').removeClass('active');
-        var href=$(this).attr('href');
-        $('.header .header-bar-nav a[href='+href+']').parent().addClass('active');
+	});
 
-        $('.side-menu').html('');
-        initMenu(menu2,$(".side-menu"));
-        $(".side-menu > li").addClass("menu-item");
-		return false;
-    })
 
-	initMenu(menu,$(".side-menu"));
-	$(".side-menu > li").addClass("menu-item");
-	
-	/*获取菜单icon随机色*/
-	//getMathColor();
 
-	$('.header .header-dropdown-menu a').click(function () {
-		$('.header-dropdown').removeClass('open');
-		$('.header-dropdown').addClass('isActive');
-		return false;
-    })
-}); 
+});

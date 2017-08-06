@@ -1,0 +1,80 @@
+<link rel="stylesheet" href="/assets/plugin/layui/css/layui.css">
+<link rel="stylesheet" href="/assets/plugin/notyf/notyf.min.css">
+<form id="form" class="layui-form" style="margin-top: 25px">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label label-required">角色名</label>
+            <div class="layui-input-inline">
+                <input type="hidden" name="id" />
+                <input type="text" name="rolename" id="rolename" lay-verify="required" placeholder="请输入角色名" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label label-required">状态</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="state" id="state" lay-skin="switch" lay-text="ON|OFF" checked>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入内容" name="desc" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-input-block">
+            <button id="btnSubmit" class="layui-btn" lay-submit lay-filter="add">提交</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/assets/plugin/jquery/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/assets/plugin/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/plugin/framework/js/global.js"></script>
+<script type="text/javascript" src="/assets/plugin/notyf/notyf.min.js" charset="utf-8"></script>
+<script>
+    layui.use('form',function () {
+     var form=layui.form(),
+     $=layui.jquery;
+     var id=$.getQueryString("id");
+     if(id){
+         $.ajax({
+             url: "/role/get",
+             data: { id: id },
+             type: "post",
+             dataType: "json",
+             async: false,
+             success: function (data) {
+                 if(data.state=="1"){
+                     $('#state').attr("checked",true);
+                 }else{
+                     $('#state').attr("checked",false);
+                 }
+                 form.render('checkbox');//这一步很关键，设置复选后还要重新渲染
+                 $("#form").formSerialize(data);
+             }
+         });
+     }else {
+
+     }
+    form.on('submit(add)', function (form) {
+        var url="";
+        if(form.field.id==""){
+            url= "/role/save";
+        }else{
+            url= "/role/update";
+        }
+        var state="0";
+        if($('#state').next().hasClass('layui-form-onswitch')){
+            state="1";
+        }
+        form.field.state=state;
+        $.formSubmit({
+            type:'post',
+            url:url,
+            data: form.field
+        });
+        return false;
+    });
+    })
+</script>

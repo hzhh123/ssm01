@@ -22,6 +22,37 @@
 			<ref bean="mappingJackson2HttpMessageConverter" />
 		</mvc:message-converters>
 	</mvc:annotation-driven>
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="cn.edu.interceptor.LoginInterceptor">
+				<property name="excludeUrls">
+					<list>
+						<value>/toLogin</value>
+						<value>/login</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:mapping path="/**/**"/>
+			<mvc:mapping path="/**/**/**"/>
+			<bean class="cn.edu.interceptor.AuthInteceptor">
+				<property name="excludeUrls">
+					<list>
+						<value>/toLogin</value>
+						<value>/login</value>
+						<value>/logout</value>
+						<value>/index</value>
+						<value>/menu/getMenus</value>
+						<value>/auth</value>
+						<value>/unAuth</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 	<!-- 配置json -->
 	<bean id="mappingJackson2HttpMessageConverter"
 		  class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">

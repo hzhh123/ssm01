@@ -92,6 +92,14 @@
             layer.msg(elem.text());
         });
     });
+    $.ajax({
+        url:"/auth",
+        dataType:'json',
+        type:'post',
+        success:function (data) {
+            console.log(data);
+        }
+    });
     $('aside').height($(window).height()-60);
     $('.content').height($(window).height()-60);
     $('.sidebar-toggle').mouseenter(function () {

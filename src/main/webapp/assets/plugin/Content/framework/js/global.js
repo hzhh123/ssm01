@@ -287,6 +287,9 @@ $.fn.formSerialize = function (formdate, callback) {
             if ($field.hasClass('select2')) {
                 type = "select2";
             }
+            if ($field.hasClass('select')) {
+                type = "select";
+            }
             switch (type) {
                 case "checkbox":
                     value == "true" ? $field.attr("checked", 'checked') : $field.removeAttr("checked");

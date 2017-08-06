@@ -55,16 +55,13 @@
         <thead>
         <tr>
             <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose"></th>
-            <th>编码</th>
+            <th>菜单名</th>
+            <th>父菜单ID</th>
             <th>图标</th>
-            <th>名称</th>
             <th>连接</th>
-            <th>类型</th>
-            <th>排序码</th>
-            <th>CSS类名</th>
-            <th>公共</th>
+            <th>顺序</th>
             <th>状态</th>
-            <th>备注</th>
+            <th>ISHEADER</th>
         </tr>
         </thead>
         <tbody id="t1"></tbody>
@@ -81,36 +78,32 @@
     <tr>
         <td>
             <input type="checkbox" lay-skin="primary" value="{{item.id}}"></td>
-        <td>{{# if(item.code==null){ }}
-            {{# }else{ }}{{item.code}}
+        <td>{{# if(item.name==null){ }}
+            {{# }else{ }}{{item.name}}
             {{# } }}
         </td>
-        <td><i class="{{item.icon}}"></i></td>
-        <td>{{item.name}}</td>
-        <td>{{# if(item.url==null){ }}无
+        <td>{{# if(item.parentid==null){ }}
+            {{# }else{ }}{{item.parentid}}
+            {{# } }}
+        </td>
+        <td>{{# if(item.icon==null){ }}
+            {{# }else{ }}{{item.icon}}
+            {{# } }}
+        </td>
+        <td>{{# if(item.url==null){ }}
             {{# }else{ }}{{item.url}}
             {{# } }}
         </td>
-        <td>{{# if(item.type==0){ }} 菜单
-            {{# }else if(item.type==1){ }} 按钮
-            {{# }else{ }} 其他
+        <td>{{# if(item.order==null){ }}
+            {{# }else{ }}{{item.order}}
             {{# } }}
         </td>
-        <td>{{item.sortCode}}</td>
-        <td>{{# if(item.classname==null){ }}
-            {{# }else{ }}{{item.classname}}
+        <td>{{# if(item.state==true){ }}  <span class="label label-success label-sm">显示</span>
+            {{# }else{ }}  <span class="label label-info label-sm">隐藏</span>
             {{# } }}
         </td>
-        <td>{{# if(item.isPublic==true){ }}  <span class="label label-success label-sm">是</span>
+        <td>{{# if(item.isheader==true){ }}  <span class="label label-success label-sm">是</span>
             {{# }else{ }}  <span class="label label-info label-sm">否</span>
-            {{# } }}
-        </td>
-        <td>{{# if(item.isEnable==true){ }}  <span class="label label-success label-sm">启用</span>
-            {{# }else{ }}  <span class="label label-info label-sm">禁用</span>
-            {{# } }}
-        </td>
-        <td>{{# if(item.remark==null){ }}无
-            {{# }else{ }}{{item.remark}}
             {{# } }}
         </td>
     </tr>
@@ -164,7 +157,7 @@
             }
             function getJson(curr) {
                 $.ajax({
-                    url: '/permission/list',
+                    url: '/menu/list',
                     data: {"pageSize": 5, "pageIndex": curr||1,"keyword":$('#searach').val()},
                     dataType: 'json',
                     success: function (data) {
@@ -184,7 +177,7 @@
                                     $('#allChoose').attr('checked', false);
                                     var curr = obj.curr;
                                     $.ajax({
-                                        url: '/permission/list',
+                                        url: '/menu/list',
                                         data: {"pageSize": 5, "pageIndex": curr,"keyword":$('#searach').val()},
                                         dataType: 'json',
                                         success: function (data) {
@@ -221,7 +214,7 @@
             return;
         }else {
             $.ajax({
-                url:'/permission/deleteBatch',
+                url:'/menu/deleteBatch',
                 data:{"ids":ids},
                 dataType:'json',
                 type:'post',
@@ -243,7 +236,7 @@
             width: "670px",
             height: "530px",
             shadeClose:false,
-            content: "/common/permission/form.html",
+            content: "/common/menu/form.html",
             yes: function (iBody) {
                 iBody.find('#btnSubmit').click();
                 init();
@@ -268,7 +261,7 @@
                 title: "<i class='fa fa-edit'></i> 编辑权限",
                 width: "670px",
                 height: "530px",
-                content: "/common/permission/form.html?id="+ids[0],
+                content: "/common/menu/form.html?id="+ids[0],
                 yes: function (iBody) {
                     iBody.find('#btnSubmit').click();
                     init();

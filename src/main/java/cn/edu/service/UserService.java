@@ -18,5 +18,7 @@ public interface UserService {
     void update(User user);
     void updateStatue(Integer id,String state);
     List<User> getUserByUsername(String username);
+    void insert(Integer userid,Integer roleid);
+    List<Integer>getRoleids(Integer userid);
 
 }
